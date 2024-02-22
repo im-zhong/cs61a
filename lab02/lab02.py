@@ -1,4 +1,3 @@
-
 def composer(f, g):
     """Return the composition function which given x, computes f(g(x)).
 
@@ -16,6 +15,7 @@ def composer(f, g):
     """
     return lambda x: f(g(x))
 
+
 def composite_identity(f, g):
     """
     Return a function with one parameter x that returns True if f(g(x)) is
@@ -31,6 +31,7 @@ def composite_identity(f, g):
     False
     """
     "*** YOUR CODE HERE ***"
+    return lambda x: f(g(x)) == g(f(x))
 
 
 def sum_digits(y):
@@ -38,6 +39,7 @@ def sum_digits(y):
     while y > 0:
         total, y = total + y % 10, y // 10
     return total
+
 
 def is_prime(n):
     if n == 1:
@@ -48,6 +50,7 @@ def is_prime(n):
             return False
         k += 1
     return True
+
 
 def count_cond(condition):
     """Returns a function with one parameter N that counts all the numbers from
@@ -75,6 +78,7 @@ def count_cond(condition):
     8
     """
     "*** YOUR CODE HERE ***"
+    return lambda n: sum([1 for i in range(1, n + 1) if condition(n, i)])
 
 
 def multiple(a, b):
@@ -86,7 +90,20 @@ def multiple(a, b):
     42
     """
     "*** YOUR CODE HERE ***"
+    # solution 1:
+    # for i in range(1, a * b + 1):
+    #     if i % a == 0 and i % b == 0:
+    #         return i
 
+    # solution 2:
+    def gcd(a, b):
+        if a < b:
+            a, b = b, a
+        while b:
+            a, b = b, a % b
+        return a
+
+    return int(a * b / gcd(a, b))
 
 
 def cycle(f1, f2, f3):
@@ -117,3 +134,16 @@ def cycle(f1, f2, f3):
     """
     "*** YOUR CODE HERE ***"
 
+    def g(n):
+        def h(x):
+            if n == 0:
+                return x
+
+            f = [f1, f2, f3]
+            for i in range(n):
+                x = f[i % 3](x)
+            return x
+
+        return h
+
+    return g
