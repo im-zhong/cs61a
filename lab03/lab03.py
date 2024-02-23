@@ -30,9 +30,14 @@ def ordered_digits(x):
     """
     "*** YOUR CODE HERE ***"
 
+    digits = [int(d) for d in str(x)]
+    return sorted(digits) == digits
+
 
 def get_k_run_starter(n, k):
     """Returns the 0th digit of the kth increasing run within n.
+    >>> get_k_run_starter(123444345, 3)
+    1
     >>> get_k_run_starter(123444345, 0) # example from description
     3
     >>> get_k_run_starter(123444345, 1)
@@ -52,12 +57,12 @@ def get_k_run_starter(n, k):
     """
     i = 0
     final = None
-    while ____________________________:
-        while ____________________________:
-            ____________________________
-        final = ____________________________
-        i = ____________________________
-        n = ____________________________
+    while i <= k:
+        while n > 9 and (n % 10 > (n // 10) % 10):
+            n = n // 10
+        final = n % 10
+        i = i + 1
+        n = n // 10
     return final
 
 
@@ -82,6 +87,24 @@ def nearest_two(x):
     """
     power_of_two = 1.0
     "*** YOUR CODE HERE ***"
+    if x > 1.0:
+        while x > power_of_two:
+            power_of_two *= 2
+        # x <= power_of_two
+        return (
+            power_of_two
+            if power_of_two - x <= x - power_of_two / 2
+            else power_of_two / 2
+        )
+    elif x < 1.0:
+        while x < power_of_two:
+            power_of_two /= 2
+        # x >= power_of_two
+        return (
+            power_of_two * 2
+            if power_of_two * 2 - x <= x - power_of_two
+            else power_of_two
+        )
     return power_of_two
 
 
@@ -102,11 +125,23 @@ def make_repeater(func, n):
     """
     "*** YOUR CODE HERE ***"
 
+    def repeater():
+        f = lambda x: x
+        for _ in range(n):
+            f = composer(func, f)
+        return f
+
+    return repeater()
+
+
 def composer(func1, func2):
     """Returns a function f, such that f(x) = func1(func2(x))."""
+
     def f(x):
         return func1(func2(x))
+
     return f
+
 
 def apply_twice(func):
     """Returns a function that applies func twice.
@@ -117,6 +152,7 @@ def apply_twice(func):
     16
     """
     "*** YOUR CODE HERE ***"
+    return lambda x: make_repeater(func, 2)(x)
 
 
 def div_by_primes_under(n):
@@ -131,12 +167,15 @@ def div_by_primes_under(n):
     False
     """
     checker = lambda x: False
-    i = ____________________________
-    while ____________________________:
+    i = 2
+    while i <= n:
         if not checker(i):
-            checker = ____________________________
-        i = ____________________________
-    return ____________________________
+            checker = (lambda f, i: lambda x: False if x < n else x % i == 0 or f(x))(
+                checker, i
+            )
+        i = i + 1
+    return checker
+
 
 def div_by_primes_under_no_lambda(n):
     """
@@ -149,16 +188,20 @@ def div_by_primes_under_no_lambda(n):
     >>> div_by_primes_under_no_lambda(5)(1)
     False
     """
+
     def checker(x):
         return False
-    i = ____________________________
-    while ____________________________:
-        if not checker(i):
-            def outer(____________________________):
-                def inner(____________________________):
-                    return ____________________________
-                return ____________________________
-            checker = ____________________________
-        i = ____________________________
-    return ____________________________
 
+    i = 2
+    while i <= n:
+        if not checker(i):
+
+            def outer(f, i):
+                def inner(x):
+                    return False if x < n else x % i == 0 or f(x)
+
+                return inner
+
+            checker = outer(checker, i)
+        i = i + 1
+    return checker
