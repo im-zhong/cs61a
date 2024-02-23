@@ -101,7 +101,7 @@ def double_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
-    return (n > 9 and n % 10 == 8 and (n // 10) % 10 == 8) or double_eights(n // 10)
+    return n > 9 and ((n % 10 == 8 and (n // 10) % 10 == 8) or double_eights(n // 10))
 
 
 def merge(lst1, lst2):
@@ -129,6 +129,35 @@ def merge(lst1, lst2):
     True
     """
     "*** YOUR CODE HERE ***"
+    # solution: loop
+    # l = []
+    # i, j = 0, 0
+    # l1, l2 = len(lst1), len(lst2)
+    # while i < l1 and j < l2:
+    #     if lst1[i] < lst2[j]:
+    #         l.append(lst1[i])
+    #         i += 1
+    #     else:
+    #         l.append(lst2[j])
+    #         j += 1
+    # if i < l1:
+    #     l.extend(lst1[i:])
+    # if j < l2:
+    #     l.extend(lst2[j:])
+    # return l
+
+    # solution: recursive
+    if len(lst1) == 0 and len(lst2) == 0:
+        return []
+    if len(lst1) != 0 and len(lst2) == 0:
+        return lst1
+    if len(lst1) == 0 and len(lst2) != 0:
+        return lst2
+
+    if lst1[0] < lst2[0]:
+        return [lst1[0]] + merge(lst1[1:], lst2)
+    else:
+        return [lst2[0]] + merge(lst1, lst2[1:])
 
 
 def summation(n, term):
@@ -150,6 +179,9 @@ def summation(n, term):
     """
     assert n >= 1
     "*** YOUR CODE HERE ***"
+    if n == 1:
+        return term(1)
+    return term(n) + summation(n - 1, term)
 
 
 def count_palindromes(L):
@@ -159,4 +191,4 @@ def count_palindromes(L):
     >>> count_palindromes(("Acme", "Madam", "Pivot", "Pip"))
     2
     """
-    return ______
+    return sum(1 for word in L if word.lower() == word[::-1].lower())
