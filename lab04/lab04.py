@@ -13,7 +13,8 @@ def my_map(fn, seq):
     2023
     [None, None, None]
     """
-    return ______
+    return [fn(e) for e in seq]
+
 
 def my_filter(pred, seq):
     """Keeps elements in seq only if they satisfy pred.
@@ -31,7 +32,8 @@ def my_filter(pred, seq):
     >>> my_filter(lambda x: max(5, x) == 5, [1, 2, 3, 4, 5, 6, 7])
     [1, 2, 3, 4, 5]
     """
-    return ______
+    return [e for e in seq if pred(e)]
+
 
 def my_reduce(combiner, seq):
     """Combines elements in seq using combiner.
@@ -46,6 +48,14 @@ def my_reduce(combiner, seq):
     11
     """
     "*** YOUR CODE HERE ***"
+    assert len(seq) > 0
+    if len(seq) == 1:
+        return seq[0]
+    initial = seq[0]
+    for i in range(1, len(seq)):
+        initial = combiner(initial, seq[i])
+    return initial
+
 
 def my_map_syntax_check():
     """Check that your two_of_three code consists of nothing but a return statement.
@@ -56,6 +66,7 @@ def my_map_syntax_check():
     ['Expr', 'Return']
     """
     # You don't need to edit this function. It's just here to check your work.
+
 
 def my_filter_syntax_check():
     """Check that your two_of_three code consists of nothing but a return statement.
@@ -69,7 +80,7 @@ def my_filter_syntax_check():
 
 
 def double_eights(n):
-    """ Returns whether or not n has two digits in row that
+    """Returns whether or not n has two digits in row that
     are the number 8. Assume n has at least two digits in it.
 
     >>> double_eights(1288)
@@ -90,6 +101,7 @@ def double_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    return (n > 9 and n % 10 == 8 and (n // 10) % 10 == 8) or double_eights(n // 10)
 
 
 def merge(lst1, lst2):
@@ -148,4 +160,3 @@ def count_palindromes(L):
     2
     """
     return ______
-
