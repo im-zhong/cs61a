@@ -1,4 +1,4 @@
-HW_SOURCE_FILE=__file__
+HW_SOURCE_FILE = __file__
 
 
 def insert_items(s, before, after):
@@ -27,6 +27,13 @@ def insert_items(s, before, after):
     True
     """
     "*** YOUR CODE HERE ***"
+    i = 0
+    while i < len(s):
+        if s[i] == before:
+            s.insert(i + 1, after)
+            i += 1
+        i += 1
+    return s
 
 
 def count_occurrences(t, n, x):
@@ -51,6 +58,7 @@ def count_occurrences(t, n, x):
     2
     """
     "*** YOUR CODE HERE ***"
+    return sum(1 for _ in range(n) if next(t) == x)
 
 
 def repeated(t, k):
@@ -74,6 +82,16 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
+    r = 1
+    old = next(t)
+    while r < k:
+        new = next(t)
+        if old == new:
+            r += 1
+        else:
+            r = 1
+        old = new
+    return old
 
 
 def partial_reverse(s, start):
@@ -81,12 +99,19 @@ def partial_reverse(s, start):
     the list.
 
     >>> a = [1, 2, 3, 4, 5, 6, 7]
+    >>> partial_reverse(a, 0)
+    >>> a
+    [7, 6, 5, 4, 3, 2, 1]
+    >>> a = [1, 2, 3, 4, 5, 6, 7]
     >>> partial_reverse(a, 2)
     >>> a
     [1, 2, 7, 6, 5, 4, 3]
     >>> partial_reverse(a, 5)
     >>> a
     [1, 2, 7, 6, 5, 3, 4]
+
     """
     "*** YOUR CODE HERE ***"
-
+    # get slice is copy
+    # but slice assignment is in-place
+    s[start:] = s[start:][::-1]
